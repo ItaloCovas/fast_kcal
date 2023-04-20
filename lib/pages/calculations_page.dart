@@ -60,9 +60,10 @@ class _CalculationsPageState extends State<CalculationsPage> {
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
+                            
                                 ),
                                 borderOnForeground: true,
-                                elevation: 5,
+                                elevation: 8,
                                 child: ListTile(
                                   onTap: () {
                                   Navigator.push(

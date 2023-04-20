@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -165,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (context) =>
                                       const ForgotPasswordPage()));
                         },
-                        child: const Text(
+                        child: const Text( 
                           'Esqueceu sua senha?',
                           style: TextStyle(
                             fontSize: 15,

@@ -74,6 +74,60 @@ class _MainPageState extends State<MainPage> {
     return calculation;
   }
 
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Text('Sucesso'),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              )
+            ],
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Cálculo feito com sucesso!'),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('Continue calculando ou veja seus cálculos.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Continuar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Meus cálculos'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CalculationsPage(
+                              calculations: calculationList,
+                            )));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void submitForm() {
     if (_formKey.currentState!.validate()) {
       final age = ageController.text;
@@ -91,18 +145,23 @@ class _MainPageState extends State<MainPage> {
         activityDropdownValue = activityLevelList.first;
       });
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CalculationsPage(
-                    calculations: calculationList,
-                  )));
+      _showDialog();
+
+      // Future.delayed(const Duration(seconds: 3), () {
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => CalculationsPage(
+      //                 calculations: calculationList,
+      //               )));
+      // });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,

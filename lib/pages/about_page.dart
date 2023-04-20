@@ -48,7 +48,7 @@ class _AboutPageState extends State<AboutPage> {
                             'assets/img/logo.png',
                             width: 100,
                             height: 100,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),
@@ -66,7 +66,7 @@ class _AboutPageState extends State<AboutPage> {
                         child: ClipOval(
                           child: Image.asset(
                             'assets/img/avatar-italo.jpeg',
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                             width: 100,
                             height: 100,
                           ),
