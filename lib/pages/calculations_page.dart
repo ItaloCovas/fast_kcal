@@ -4,6 +4,7 @@ import 'package:fast_kcal/pages/calculation_details_page.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/calculation_controller.dart';
+import 'edit_calculation_page.dart';
 
 class CalculationsPage extends StatefulWidget {
   const CalculationsPage({super.key});
@@ -13,6 +14,12 @@ class CalculationsPage extends StatefulWidget {
 }
 
 class _CalculationsPageState extends State<CalculationsPage> {
+  void delete(id) {
+    setState(() {
+      CalculationController().deleteCalculation(context, id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,8 @@ class _CalculationsPageState extends State<CalculationsPage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.none ||
                             snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                ConnectionState.waiting ||
+                            snapshot.data!.isEmpty) {
                           return const Center(
                             child: Text(
                               'Você ainda não possui cálculos.',
@@ -57,6 +65,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
                         } else {
                           return Expanded(
                             child: ListView.builder(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
                                 Calculation calculation = snapshot.data![index];
@@ -69,6 +78,30 @@ class _CalculationsPageState extends State<CalculationsPage> {
                                     borderOnForeground: true,
                                     elevation: 8,
                                     child: ListTile(
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.edit,
+                                                color: Colors.black),
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditCalculationPage(
+                                                            calculation:
+                                                                snapshot.data![
+                                                                    index]))),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          IconButton(
+                                            icon: const Icon(Icons.delete,
+                                                color: Colors.red),
+                                            onPressed: () => delete(
+                                                snapshot.data![index].uid),
+                                          ),
+                                        ],
+                                      ),
                                       onTap: () {
                                         Navigator.push(
                                           context,

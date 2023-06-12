@@ -1,6 +1,8 @@
 import 'package:fast_kcal/models/calculation.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/login_controller.dart';
+
 class CalculationDetailsPage extends StatefulWidget {
   final Calculation calculation;
   const CalculationDetailsPage({super.key, required this.calculation});
@@ -35,11 +37,36 @@ class _CalculationDetailsPageState extends State<CalculationDetailsPage> {
                 children: <Widget>[
                   SizedBox(
                     width: constraints.maxWidth * 0.8,
-                    child: const Center(
-                        child: Text(
-                      'Nome da pessoa',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )),
+                    child: Center(
+                      child: FutureBuilder<String>(
+                          future: LoginController().loggedUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Column(
+                                children: [
+                                  const Icon(
+                                    Icons.fitness_center_rounded,
+                                    size: 70,
+                                    color: Colors.orange,
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text('${snapshot.data}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20))
+                                ],
+                              );
+                            }
+
+                            return const Text(
+                              'Nome inválido',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            );
+                          }),
+                    ),
                   ),
                   const SizedBox(
                     height: 30,
