@@ -1,8 +1,13 @@
+import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:fast_kcal/models/calculation.dart';
 import 'package:fast_kcal/pages/about_page.dart';
 import 'package:fast_kcal/pages/calculations_page.dart';
+import 'package:fast_kcal/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
+
+import '../controllers/calculation_controller.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -30,7 +35,7 @@ class _MainPageState extends State<MainPage> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
 
-  List<Calculation> calculationList = [];
+  var userId = LoginController().getUserId();
 
   @override
   void dispose() {
@@ -40,7 +45,7 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
-  Calculation calculate(String gender, int age, double weight, double height,
+  void calculate(String gender, int age, double weight, double height,
       String activityLevel) {
     double activityLevelValue = 0;
     switch (activityLevel) {
@@ -67,17 +72,28 @@ class _MainPageState extends State<MainPage> {
     int loseWeight = maintenance - 450;
     int gainWeight = maintenance + 450;
 
-    Calculation calculation = Calculation(gender, age, weight, height,
-        activityLevel, tmb, maintenance, loseWeight, gainWeight);
-    calculationList.add(calculation);
+    const uuid = Uuid();
 
-    return calculation;
+    Calculation calculation = Calculation(
+        LoginController().getUserId(),
+        uuid.v4(),
+        gender,
+        age,
+        weight,
+        height,
+        activityLevel,
+        tmb,
+        maintenance,
+        loseWeight,
+        gainWeight);
+
+    CalculationController().createCalculation(context, calculation);
   }
 
   Future<void> _showDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Row(
@@ -117,9 +133,7 @@ class _MainPageState extends State<MainPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CalculationsPage(
-                              calculations: calculationList,
-                            )));
+                        builder: (context) => const CalculationsPage()));
               },
             ),
           ],
@@ -170,16 +184,41 @@ class _MainPageState extends State<MainPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const SizedBox(
+            SizedBox(
               height: 100,
               child: DrawerHeader(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Color(0xffFFA123),
                 ),
                 child: Center(
-                    child: Text(
-                  'Bem-vindo, Ítalo G. Covas',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FutureBuilder<String>(
+                        future: LoginController().loggedUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return Text('Bem-vindo, ${snapshot.data}');
+                          }
+
+                          return const Text(
+                            'Bem-vindo, usuário',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          );
+                        }),
+                    IconButton(
+                      icon:
+                          const Icon(Icons.logout_rounded, color: Colors.black),
+                      onPressed: () {
+                        LoginController().logout();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()));
+                      },
+                    ),
+                  ],
                 )),
               ),
             ),
@@ -196,9 +235,7 @@ class _MainPageState extends State<MainPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CalculationsPage(
-                              calculations: calculationList,
-                            )));
+                        builder: (context) => const CalculationsPage()));
               },
             ),
           ],

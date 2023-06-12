@@ -1,5 +1,7 @@
-import 'package:fast_kcal/pages/success_page.dart';
+import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
+
+import 'success_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -29,9 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   void submitForm() {
     if (_formKey.currentState!.validate()) {
       final email = emailController.text;
-      print('Email address: $email');
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const SuccessPage(type: 'email')));
+      LoginController().forgotPassword(context, email);
     }
   }
 
@@ -86,7 +86,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               fontSize: 16,
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.emailAddress,
                             controller: emailController,

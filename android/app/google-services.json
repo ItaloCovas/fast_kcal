@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "713996855958",
+    "project_id": "fast-kcal",
+    "storage_bucket": "fast-kcal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713996855958:android:ab01411c0f5e0031db70b7",
+        "android_client_info": {
+          "package_name": "com.example.fast_kcal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713996855958-ihrf1pnkpc2eu33b4qf1jboeiv24oan0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBApIwtSSfLWiHNV24OFv_VN122pBQDLeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713996855958-ihrf1pnkpc2eu33b4qf1jboeiv24oan0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

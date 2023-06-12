@@ -1,5 +1,6 @@
-import 'package:fast_kcal/pages/login_page.dart';
 import 'package:flutter/material.dart';
+
+import 'main_page.dart';
 
 class SuccessPage extends StatefulWidget {
   final String type;
@@ -13,9 +14,8 @@ class SuccessPage extends StatefulWidget {
 class _SuccessPageState extends State<SuccessPage> {
   @override
   Widget build(BuildContext context) {
-
     String message(String type) {
-      switch(widget.type) {
+      switch (widget.type) {
         case 'email':
           return 'E-mail enviado com sucesso!';
         case 'registration':
@@ -28,7 +28,7 @@ class _SuccessPageState extends State<SuccessPage> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const MainPage()),
       );
     });
 
@@ -49,8 +49,12 @@ class _SuccessPageState extends State<SuccessPage> {
                     height: 200,
                     child: Image.asset('assets/img/check.png'),
                   ),
-                  const SizedBox(height: 30,),
-                   Text(message(widget.type), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(message(widget.type),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold))
                 ],
               ),
             ),

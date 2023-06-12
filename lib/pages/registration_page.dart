@@ -1,3 +1,4 @@
+import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:fast_kcal/pages/success_page.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void validatePasswordRepeat(String password) {
     final passwordControllerText = passwordController.text;
-    if(password == passwordControllerText) {
+    if (password == passwordControllerText) {
       setState(() {
         isPasswordRepeatitionValid = true;
       });
@@ -47,11 +48,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
       final email = emailController.text;
       final password = passwordController.text;
       final name = nameController.text;
-      final repeat = repeatPasswordController.text;
 
-      print('Data: $email, $name, $password, $repeat');
+      LoginController().createAccount(context, name, email, password);
+
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) =>  const SuccessPage(type: 'registration')));
+          context,
+          MaterialPageRoute(
+              builder: (context) => const SuccessPage(type: 'registration')));
     }
   }
 
@@ -210,17 +213,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               obscureText: true,
                               controller: repeatPasswordController,
                               validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe sua senha.';
-                              } else if (value.length < 8) {
-                                return 'Sua senha deve ter no mínimo 8 caracteres.';
-                              } else if (!isPasswordRepeatitionValid) {
-                                return 'As senhas devem ser iguais.';
-                              }
+                                if (value == null || value.isEmpty) {
+                                  return 'Informe sua senha.';
+                                } else if (value.length < 8) {
+                                  return 'Sua senha deve ter no mínimo 8 caracteres.';
+                                } else if (!isPasswordRepeatitionValid) {
+                                  return 'As senhas devem ser iguais.';
+                                }
 
-                              return null;
-                            },
-                            onChanged: validatePasswordRepeat,
+                                return null;
+                              },
+                              onChanged: validatePasswordRepeat,
                               decoration: const InputDecoration(
                                   helperText: " ",
                                   hintText: 'Repita sua senha...',

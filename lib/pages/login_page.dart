@@ -1,5 +1,5 @@
+import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:fast_kcal/pages/forgot_password_page.dart';
-import 'package:fast_kcal/pages/main_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -34,9 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       final email = emailController.text;
       final password = passwordController.text;
 
-      print('Data: $email, $password');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const MainPage()));
+      LoginController().login(context, email, password);
     }
   }
 
@@ -166,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (context) =>
                                       const ForgotPasswordPage()));
                         },
-                        child: const Text( 
+                        child: const Text(
                           'Esqueceu sua senha?',
                           style: TextStyle(
                             fontSize: 15,

@@ -1,10 +1,12 @@
+import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:fast_kcal/models/calculation.dart';
 import 'package:fast_kcal/pages/calculation_details_page.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/calculation_controller.dart';
+
 class CalculationsPage extends StatefulWidget {
-  final List<Calculation> calculations;
-  const CalculationsPage({super.key, required this.calculations});
+  const CalculationsPage({super.key});
 
   @override
   State<CalculationsPage> createState() => _CalculationsPageState();
@@ -39,58 +41,77 @@ class _CalculationsPageState extends State<CalculationsPage> {
                     height: constraints.maxHeight * 0.4,
                     child: Image.asset('assets/img/logo.png'),
                   ),
-                  Builder(builder: (context) {
-                    if (widget.calculations.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Você ainda não possui cálculos.',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                      );
-                    } else {
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: widget.calculations.length,
-                          itemBuilder: (context, index) {
-                            Calculation calculation =
-                                widget.calculations[index];
-                            return SizedBox(
-                              width: constraints.maxWidth * 0.5,
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                            
-                                ),
-                                borderOnForeground: true,
-                                elevation: 8,
-                                child: ListTile(
-                                  onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CalculationDetailsPage(
-                                          calculation: widget.calculations[index]),
+                  FutureBuilder<List<Calculation>>(
+                      future: CalculationController().listCalculations(context),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none ||
+                            snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                          return const Center(
+                            child: Text(
+                              'Você ainda não possui cálculos.',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          );
+                        } else {
+                          return Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                Calculation calculation = snapshot.data![index];
+                                return SizedBox(
+                                  width: constraints.maxWidth * 0.5,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
                                     ),
-                                  );
-                                },
-                                  title: Text(
-                                      'Nome da pessoa - ${calculation.age} anos',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
-                                    calculation.activityLevel,
-                                    style: const TextStyle(
-                                        color: Color(0xffFFA123)),
+                                    borderOnForeground: true,
+                                    elevation: 8,
+                                    child: ListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CalculationDetailsPage(
+                                                    calculation:
+                                                        snapshot.data![index]),
+                                          ),
+                                        );
+                                      },
+                                      title: FutureBuilder<String>(
+                                          future:
+                                              LoginController().loggedUser(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.done) {
+                                              return Text(
+                                                  '${snapshot.data} - ${calculation.age} anos',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold));
+                                            }
+
+                                            return const Text(
+                                              'Cálculo inválido',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            );
+                                          }),
+                                      subtitle: Text(
+                                        snapshot.data![index].activityLevel,
+                                        style: const TextStyle(
+                                            color: Color(0xffFFA123)),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                  }),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      }),
                 ],
               ),
             ),
