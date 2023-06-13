@@ -13,27 +13,32 @@ class LoginController {
       email: email,
       password: password,
     )
-        .then((result) {
-      FirebaseFirestore.instance.collection('usuarios').add(
+        .then((result) async {
+      FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(result.user!.uid)
+          .set(
         {
           'uid': result.user!.uid,
           'nome': name,
         },
-      );
-
-      success(context, 'Usuário criado com sucesso.');
-      Navigator.pop(context);
-    }).catchError((e) {
-      switch (e.code) {
-        case 'email-already-in-use':
-          error(context, 'O email já foi cadastrado.');
-          break;
-        case 'invalid-email':
-          error(context, 'O formato do email é inválido.');
-          break;
-        default:
-          error(context, 'ERRO: ${e.code.toString()}');
-      }
+      ).then((value) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const SuccessPage(type: 'registration')));
+      }).catchError((e) {
+        switch (e.code) {
+          case 'email-already-in-use':
+            error(context, 'O email já foi cadastrado.');
+            break;
+          case 'invalid-email':
+            error(context, 'O formato do email é inválido.');
+            break;
+          default:
+            error(context, 'ERRO: ${e.code.toString()}');
+        }
+      });
     });
   }
 
@@ -84,6 +89,21 @@ class LoginController {
 
   getUserId() {
     return FirebaseAuth.instance.currentUser!.uid;
+  }
+
+  Future<String> changeUsername(context, newName) async {
+    var newUsername = newName;
+    var userId = await getUserId();
+
+    FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(userId)
+        .set({'nome': newUsername}, SetOptions(merge: true)).then((result) {
+      success(context, 'Nome atualizado com sucesso!');
+      Navigator.of(context).pop();
+    }).catchError((e) => error(context, 'Erro na atualização'));
+
+    return newUsername;
   }
 
   Future<String> loggedUser() async {

@@ -1,5 +1,4 @@
 import 'package:fast_kcal/controllers/login_controller.dart';
-import 'package:fast_kcal/pages/success_page.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -50,11 +49,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       final name = nameController.text;
 
       LoginController().createAccount(context, name, email, password);
-
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const SuccessPage(type: 'registration')));
     }
   }
 

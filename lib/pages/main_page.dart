@@ -1,13 +1,12 @@
 import 'package:fast_kcal/controllers/login_controller.dart';
 import 'package:fast_kcal/models/calculation.dart';
-import 'package:fast_kcal/pages/about_page.dart';
 import 'package:fast_kcal/pages/calculations_page.dart';
-import 'package:fast_kcal/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../controllers/calculation_controller.dart';
+import '../widgets/drawer.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -171,67 +170,7 @@ class _MainPageState extends State<MainPage> {
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.black)),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(
-              height: 100,
-              child: DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Color(0xffFFA123),
-                ),
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FutureBuilder<String>(
-                        future: LoginController().loggedUser(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return Text('Bem-vindo, ${snapshot.data}');
-                          }
-
-                          return const Text(
-                            'Bem-vindo, usuário',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          );
-                        }),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.logout_rounded, color: Colors.black),
-                      onPressed: () {
-                        LoginController().logout();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()));
-                      },
-                    ),
-                  ],
-                )),
-              ),
-            ),
-            ListTile(
-              title: const Text('Sobre'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AboutPage()));
-              },
-            ),
-            ListTile(
-              title: const Text('Seus cálculos'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CalculationsPage()));
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: const CustomDrawer(),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Center(

@@ -1,6 +1,5 @@
+import 'package:fast_kcal/pages/login_page.dart';
 import 'package:flutter/material.dart';
-
-import 'main_page.dart';
 
 class SuccessPage extends StatefulWidget {
   final String type;
@@ -13,6 +12,17 @@ class SuccessPage extends StatefulWidget {
 
 class _SuccessPageState extends State<SuccessPage> {
   @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String message(String type) {
       switch (widget.type) {
@@ -24,13 +34,6 @@ class _SuccessPageState extends State<SuccessPage> {
 
       return '';
     }
-
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
-      );
-    });
 
     return Scaffold(
       body: LayoutBuilder(

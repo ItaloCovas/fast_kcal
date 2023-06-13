@@ -4,6 +4,7 @@ import 'package:fast_kcal/pages/calculation_details_page.dart';
 import 'package:flutter/material.dart';
 
 import '../controllers/calculation_controller.dart';
+import '../widgets/drawer.dart';
 import 'edit_calculation_page.dart';
 
 class CalculationsPage extends StatefulWidget {
@@ -23,14 +24,12 @@ class _CalculationsPageState extends State<CalculationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
