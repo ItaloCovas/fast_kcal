@@ -5,6 +5,7 @@ import '../controllers/login_controller.dart';
 import '../pages/about_page.dart';
 import '../pages/calculations_page.dart';
 import '../pages/home_page.dart';
+import '../pages/workout_page.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -157,7 +158,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           ListTile(
-            title: const Text('Seus cálculos'),
+            title: const Text('Meus cálculos'),
             onTap: () {
               Navigator.pushReplacement(
                   context,
@@ -166,7 +167,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           ListTile(
-            title: const Text('Alterar meu nome'),
+            title: const Text('Meu Treino'),
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const WorkoutPage()));
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Alterar meu nome',
+            ),
             onTap: () {
               _showDialog();
             },
